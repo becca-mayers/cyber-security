@@ -16,7 +16,7 @@ from bs4 import BeautifulSoup as bs
 from calendar import month_name
 import pandas as pd
 
-def get_cves_details(driver, wait, today, project_id):
+def get_cves_details(driver, wait, today, project_id, cves_table_id):
     
     #get the total number of cves from the home page
     cve_details_home_url = 'https://www.cvedetails.com/index.php'
@@ -110,21 +110,43 @@ def get_cves_details(driver, wait, today, project_id):
     
     #load to big query
     to_gbq(final_cve_details_df, 
-           'cves.cves-table', 
+           cves_table_id, 
            project_id = project_id, 
            if_exists = 'replace')
 
     #Check loaded table size
-    table_size_sql = """ select count(*) from `cves.cves-table` """
+    table_size_sql = """ select count(*) from `{}` """.format(cves_table_id)
     table_size = read_gbq(table_size_sql, project_id = project_id)
     table_size = table_size.iloc[0,0]
     
-    print('CVES table size: ', table_size)
-    
-    #Compare this to the total cves value (collected earlier on)
+   
+    #make runtime results dataframe
+    results = {        'date': today,
+                   'function': cves_table_id,
+               'source_count': total_cves,
+               'result_count': table_size}
+
+    #Compare this to the total exploits value (collected earlier on)
     
     if total_cves == table_size:
-        print('CVES Big Query Records Count - Successful')
+        
+        #Let me know the results and also store them to BQ
+        print('CVES - Big Query Records Count - Successful')
+        results['pass_fail'] = 'pass'
+        results_df = pd.DataFrame.from_records([results])
+        to_gbq(results_df, 
+               'runtime.results', 
+               project_id = project_id, 
+               if_exists = 'append')
     
     else:
+            
+        #Let me know the results and also store them to BQ
         print('ERROR! CVES Record Count != Big Query Table Count')
+        results['pass_fail'] = 'fail'
+        results_df = pd.DataFrame.from_records([results])
+        to_gbq(results_df, 
+               'runtime.results', 
+               project_id = project_id, 
+               if_exists = 'append')
+    

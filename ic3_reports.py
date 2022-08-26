@@ -15,7 +15,7 @@ from pandas_gbq import to_gbq
 from time import sleep
 import pandas as pd
 
-def get_ic3(driver, wait, today):
+def get_ic3(driver, wait, today, ic3_table_id):
 
     ic3_years = list(range(2016,2022))
 
@@ -128,7 +128,9 @@ def get_ic3(driver, wait, today):
 
     #load to big query
     to_gbq(final_ic3_dff, 
-           'ic3.ic3-table', 
+           ic3_table_id, 
            project_id = 'cyber-crime-360523', 
            if_exists = 'replace')
+    
+    
     

@@ -18,7 +18,7 @@ from time import time
 start_time = time()
 
 #set today's date
-today = datetime.today().strftime('%d-%m-%Y')
+today = datetime.today().strftime('%d-%m-%Y %I:%M%p')
 
 #initialize Google Big Query Project ID
 project_id = 'cyber-crime-360523'
@@ -27,13 +27,16 @@ project_id = 'cyber-crime-360523'
 driver, wait = launch_driver()
 
 #get cves
-get_cves_details(driver, wait, today, project_id)
+cves_table_id = 'cves.details'
+get_cves_details(driver, wait, today, project_id, cves_table_id)
 
 #get google exploits
-get_google_exploits(driver, wait, today, project_id)
+google_exploits_table_id = 'google.exploits'
+get_google_exploits(driver, wait, today, project_id, google_exploits_table_id)
 
 #get ic3
-get_ic3(driver, wait, today, project_id)
+ic3_table_id = 'ic3.reports'
+get_ic3(driver, wait, today, project_id, ic3_table_id)
 
 #close out the driver
 driver.close()
