@@ -1,2 +1,2 @@
 # cyber-crime
-Automated collection and analysis of cybercrime-related data
+Automated collection and analysis of cyber crime-related data
