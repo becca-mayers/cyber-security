@@ -29,7 +29,7 @@ def launch_driver():
                           TimeoutException)
     
     chrome_options = Options()
-    #chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--headless")
     
     driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options) 
     wait = WebDriverWait(driver, 6, poll_frequency=6, ignored_exceptions=ignored_exceptions)

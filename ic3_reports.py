@@ -129,6 +129,6 @@ def get_ic3(driver, wait, today):
     #load to big query
     to_gbq(final_ic3_dff, 
            'ic3.ic3-table', 
-           project_id = 'cyer-crime-360523', 
+           project_id = 'cyber-crime-360523', 
            if_exists = 'replace')
     

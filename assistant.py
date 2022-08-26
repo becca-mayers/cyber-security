@@ -26,3 +26,6 @@ def scroll_to_bottom(driver):
 
 def scroll_200(driver):
     return driver.execute_script("window.scrollTo(0, window.scrollY + 200)")
+
+def scroll_up(driver):
+    driver.execute_script("scrollBy(0,250);")
